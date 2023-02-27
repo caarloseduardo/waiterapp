@@ -3,7 +3,7 @@ import { model, Schema } from 'mongoose'
 export const Order = model(
   'Order',
   new Schema({
-    name: {
+    table: {
       type: String,
       required: true
     },
