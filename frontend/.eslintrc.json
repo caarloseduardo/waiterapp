@@ -1,0 +1,17 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "extends": ["plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint/eslint-plugin", "prettier"],
+  "rules": {
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "prettier/prettier": "error"
+  }
+}
