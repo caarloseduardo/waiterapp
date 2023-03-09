@@ -9,7 +9,7 @@ export const Board = styled.div`
   flex-direction: column;
   align-items: center;
 
-  header {
+  > header {
     padding: 8px;
     font-size: 14px;
     display: flex;
@@ -35,6 +35,7 @@ export const OrdersContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 4px;
+    outline: none;
 
     strong {
       font-weight: 500;
