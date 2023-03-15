@@ -11,14 +11,18 @@ import {
 
 import { Text } from '../Text'
 
-import { products } from '../../mocks/products'
 import { PlusCircle } from '../Icons/PlusCircle'
 import { ProductModal } from '../ProductModal'
 
 import { Product } from '../../types/product'
 import { formatCurrency } from '../../utils/format-currency'
 
-export function Menu() {
+interface MenuProps {
+  onAddToCart: (product: Product) => void
+  products: Product[]
+}
+
+export function Menu({ onAddToCart, products }: MenuProps) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null)
 
@@ -33,6 +37,7 @@ export function Menu() {
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         product={selectedProduct}
+        onAddToCart={onAddToCart}
       />
 
       <FlatList
@@ -59,7 +64,7 @@ export function Menu() {
               </Text>
             </ProductDetails>
 
-            <AddToCartButton>
+            <AddToCartButton onPress={() => onAddToCart(product)}>
               <PlusCircle />
             </AddToCartButton>
           </ProductContainer>
