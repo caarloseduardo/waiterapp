@@ -20,29 +20,44 @@ import { MinusCircle } from '../Icons/MinusCircle'
 
 import { Product } from '../../types/product'
 import { CartItem } from '../../types/cart-item'
+
 import { formatCurrency } from '../../utils/format-currency'
+import { api } from '../../utils/api'
 
 interface CartProps {
   cartItems: CartItem[]
   onAdd: (product: Product) => void
   onDecrement: (product: Product) => void
   onConfirmOrder: () => void
+  selectedTable: string
 }
 
 export function Cart({
   cartItems,
   onAdd,
   onDecrement,
-  onConfirmOrder
+  onConfirmOrder,
+  selectedTable
 }: CartProps) {
-  const [isLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const total = cartItems.reduce((acc, cartItem) => {
     return acc + cartItem.quantity * cartItem.product.price
   }, 0)
 
-  function handleConfirmOrder() {
+  async function handleConfirmOrder() {
+    setIsLoading(true)
+
+    await api.post('/orders', {
+      table: selectedTable,
+      products: cartItems.map(cartItem => ({
+        product: cartItem.product._id,
+        quantity: cartItem.quantity
+      }))
+    })
+
+    setIsLoading(false)
     setIsModalVisible(true)
   }
 
@@ -66,7 +81,7 @@ export function Cart({
               <ProductContainer>
                 <Image
                   source={{
-                    uri: `http://192.168.15.78:19000/uploads/${cartItem.product.imagePath}`
+                    uri: `http://192.168.15.78:3001/uploads/${cartItem.product.imagePath}`
                   }}
                 />
 
