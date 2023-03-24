@@ -5,12 +5,15 @@ import { Overlay, ModalBody, OrderDetails, Actions } from './styles'
 import closeIcon from '../../assets/images/close-icon.svg'
 
 import { formatCurrency } from '../../utils/format-currency'
-import { Order } from '../../@types/orders'
+import { Order } from '../../@types/order'
 
 interface OrderModalProps {
   visible: boolean
   order: Order | null
+  isLoading: boolean
   onClose: () => void
+  onCancelOrder: () => Promise<void>
+  onChangeOrderStatus: () => Promise<void>
 }
 
 const STATUS_PROPS = {
@@ -28,7 +31,14 @@ const STATUS_PROPS = {
   }
 }
 
-export function OrderModal({ visible, order, onClose }: OrderModalProps) {
+export function OrderModal({
+  visible,
+  order,
+  isLoading,
+  onClose,
+  onCancelOrder,
+  onChangeOrderStatus
+}: OrderModalProps) {
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -102,12 +112,30 @@ export function OrderModal({ visible, order, onClose }: OrderModalProps) {
         </OrderDetails>
 
         <Actions>
-          <button type="button" className="primary">
-            <span>👩‍🍳</span>
-            <strong>Iniciar produção</strong>
-          </button>
+          {order.status !== 'DONE' && (
+            <button
+              type="button"
+              className="primary"
+              disabled={isLoading}
+              onClick={onChangeOrderStatus}
+            >
+              <span>
+                {order.status === 'WAITING' && '👩‍🍳'}
+                {order.status === 'IN_PRODUCTION' && '✅'}
+              </span>
+              <strong>
+                {order.status === 'WAITING' && 'Iniciar Produção'}
+                {order.status === 'IN_PRODUCTION' && 'Concluir Pedido'}
+              </strong>
+            </button>
+          )}
 
-          <button type="button" className="secondary">
+          <button
+            type="button"
+            className="secondary"
+            disabled={isLoading}
+            onClick={onCancelOrder}
+          >
             <span>Cancelar Pedido</span>
           </button>
         </Actions>
